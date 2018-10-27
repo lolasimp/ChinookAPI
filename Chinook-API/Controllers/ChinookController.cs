@@ -44,5 +44,11 @@ namespace Chinook_API.Controllers
         {
             _storage.AddInvoice(invoice);
         }
+
+        [HttpPut("{id}")]
+        public IActionResult UpdateEmp(int id, string fName, string lName)
+        {
+            return Ok(_storage.UpdateEmployeesName(id, fName, lName));
+        }
     }
 }
