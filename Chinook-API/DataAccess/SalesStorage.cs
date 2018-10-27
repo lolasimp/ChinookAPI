@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Chinook_API.Models;
 using System.Data.SqlClient;
 
+
 namespace Chinook_API.DataAccess
 {
     public class SalesStorage
@@ -87,5 +88,32 @@ namespace Chinook_API.DataAccess
                 return count;
             }
         } 
+
+        public bool AddInvoice(Invoice invoice)
+        {
+            using (var connection= new SqlConnection(ConnectionString))
+            {
+                connection.Open();
+
+                var command = connection.CreateCommand();
+                command.CommandText = @"INSERT INTO [dbo].[Invoice]([CustomerId],[InvoiceDate],[BillingAddress],[BillingCity], [BillingState],[BillingCountry],[BillingPostalCode],[Total])
+                                        VALUES (@CustomerId, @InvoiceDate, @BillingAddress, @BillingCity, @BillingState, @BillingCountry, @BillingPostalCode, @Total)";
+
+                command.Parameters.AddWithValue(@"customerId", invoice.CustomerId);
+                command.Parameters.AddWithValue(@"invoiceDate", invoice.InvoiceDate);
+                command.Parameters.AddWithValue(@"billingAddress", invoice.BillingAddress);
+                command.Parameters.AddWithValue(@"billingCity", invoice.BillingCity);
+                command.Parameters.AddWithValue(@"billingState",invoice.BillingState);
+                command.Parameters.AddWithValue(@"billingCountry", invoice.BillingCountry);
+                command.Parameters.AddWithValue(@"billingPostalCode", invoice.BillingPostalCode);
+                command.Parameters.AddWithValue(@"total", invoice.Total);
+
+
+
+                var result = command.ExecuteNonQuery();
+
+                return result == 1;
+            }
+        }
     }
 }
